@@ -1,0 +1,29 @@
+@URL_BASE=http://localhost:8080/todo
+
+### Obter uma pessoa pelo ID
+GET {{URL_BASE}}/1
+
+### Obter todas os Afazeres
+GET {{URL_BASE}}
+
+### Criar um Afazer
+POST {{URL_BASE}}
+Content-Type: application/json
+
+{
+    "title": "Tarefa TAC",
+    "description": "Fazer a tarefa",
+    "person": {
+        "id": 1
+    }
+}
+
+### Atualizar uma pessoa
+PUT {{URL_BASE}}/1
+
+{
+
+}
+
+### Deletar uma pessoa
+DELETE {{URL_BASE}}/1
