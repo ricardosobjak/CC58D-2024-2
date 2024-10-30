@@ -1,6 +1,11 @@
 package br.edu.utfpr.todo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.utfpr.todo.model.Person;
 import br.edu.utfpr.todo.repository.PersonRepository;
+import jakarta.websocket.server.PathParam;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/person")
@@ -26,14 +34,25 @@ public class PersonController {
         return person;
     }
 
+    // Obter uma pessoa pelo ID
     @GetMapping("{id}")
-    public String get(@PathVariable int id) {
-        return "Obtendo uma pessoa: "+id;
+    public ResponseEntity<Object> get(@PathVariable long id) {
+        // Buscando a pessoa no DB (retorna um tipo Optional)
+        var personOpt = personRepository.findById(id);
+
+        return personOpt.isPresent()
+                ? ResponseEntity.ok(personOpt.get()) // status 200
+                : ResponseEntity.notFound().build(); // status 404
     }
 
+    // Busca paginada
     @GetMapping
-    public String getAll() {
-        return "Obtendo todas pessoas";
+    public ResponseEntity<Page<Person>> getAll(
+            @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        return ResponseEntity
+                .status(206)
+                .body(personRepository.findAll(pageable));
     }
 
     @PutMapping
@@ -41,8 +60,21 @@ public class PersonController {
         return "Pessoa Atualizada";
     }
 
-    @DeleteMapping
-    public String delete() {
-        return "Pessoa Deletada";
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> delete(@PathVariable long id) {
+        // Busca a pessoa no banco de dados pelo ID
+        var personOpt = personRepository.findById(id);
+
+        if(personOpt.isPresent()) { // A pessoa existe
+            try { // Tenta deletar (Sucesso)
+                personRepository.delete(personOpt.get());
+                return ResponseEntity.ok().build();
+            } catch(Exception ex) { // Falha ao deletar
+                return ResponseEntity.badRequest()
+                    .body("Falha ao deletar: " + ex.getMessage());
+            }
+        } else 
+            // Pessoa não encontrada (404)
+            return ResponseEntity.notFound().build();
     }
 }
