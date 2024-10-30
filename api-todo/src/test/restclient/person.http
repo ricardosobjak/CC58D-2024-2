@@ -2,9 +2,11 @@
 
 ### Obter uma pessoa pelo ID
 GET {{URL_BASE}}/15
+Authorization: xxxxxxxxxxxxxxxxxx
 
 ### Obter todas as pessoas
 GET {{URL_BASE}}?page=0&size=10&sort=name
+Authorization: xxxxxxxxxxxxxxxxxx
 
 ### Criar uma pessoa
 POST {{URL_BASE}}
@@ -18,10 +20,15 @@ Content-Type: application/json
 
 ### Atualizar uma pessoa
 PUT {{URL_BASE}}/1
+Content-Type: application/json
+Authorization: xxxxxxxxxxxxxxxxxx
 
 {
-
+    "name": "Vicente",
+    "email": "vicente@gmail.com",
+    "password": "321"
 }
 
 ### Deletar uma pessoa
 DELETE {{URL_BASE}}/1
+Authorization: xxxxxxxxxxxxxxxxxx
