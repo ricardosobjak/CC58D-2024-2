@@ -1,5 +1,6 @@
 package br.edu.utfpr.todo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,14 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.utfpr.todo.model.Person;
+import br.edu.utfpr.todo.repository.PersonRepository;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+    @Autowired // Injeção de dependência
+    private PersonRepository personRepository;
+
     @PostMapping
-    public String create(@RequestBody Person person) {
+    public Person create(@RequestBody Person person) {
+        personRepository.save(person);
         System.out.println(person);
-        return "Pessoa Criada";
+        return person;
     }
 
     @GetMapping("{id}")

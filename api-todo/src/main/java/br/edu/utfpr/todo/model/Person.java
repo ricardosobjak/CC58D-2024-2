@@ -16,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
+@Entity // é uma entidade gerenciada pelo JPA
 @Table(name = "tb_person")
 public class Person {
     @Id
@@ -25,5 +25,4 @@ public class Person {
     private String name;
     private String email;
     private String password;
-
 }
