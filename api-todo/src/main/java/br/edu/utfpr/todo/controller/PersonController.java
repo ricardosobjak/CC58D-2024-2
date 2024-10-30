@@ -1,5 +1,6 @@
 package br.edu.utfpr.todo.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.utfpr.todo.dto.PersonDTO;
 import br.edu.utfpr.todo.model.Person;
 import br.edu.utfpr.todo.repository.PersonRepository;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 import java.util.List;
@@ -55,10 +59,27 @@ public class PersonController {
                 .body(personRepository.findAll(pageable));
     }
 
-    @PutMapping
-    public String put() {
-        return "Pessoa Atualizada";
+    @PutMapping("{id}")
+    public ResponseEntity<Object> put(@PathVariable long id, 
+        @Valid @RequestBody PersonDTO dto) {
+            // Buscar a pessoa no banco de dados
+            var personOpt = personRepository.findById(id);
+
+            if(personOpt.isPresent()) {
+                var person = personOpt.get();
+                BeanUtils.copyProperties(dto, person);
+                try { 
+                    personRepository.save(person);
+                    return ResponseEntity.ok().body(person);
+                } catch(Exception ex) {
+                    return ResponseEntity.badRequest()
+                        .body("Falha ao salvar: " + ex.getMessage());
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
     }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> delete(@PathVariable long id) {
