@@ -1,6 +1,6 @@
 @URL = http://localhost:8080/person
 
-@token = Bearer 
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBUEkgYXV0aGVudGljYXRpb24iLCJpZCI6ImQ4NGMwMWQ2LThiMzctNDQ2OC1iOWQzLTNhZTc1YTJhNDkxNyIsInVzZXJuYW1lIjoiYWRtaW5AYWRtaW4uY29tIiwiaWF0IjoxNzMwNDA0NDg4LCJleHAiOjE3MzA0MDgwODgsImlzcyI6IlVURlBSIn0.8fHJOwReCnKED4my15tU4TrHgKKMk-mzmb3IrGJbxIw
 
 
 ### Obter todas pessoas
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
     "name": "Juca",
-    "email": "juca@gmail.com",
+    "email": "jucaa@gmail.com",
     "password": "1234",
     "birth": "2000-05-05"
 }
