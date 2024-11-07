@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const isAuthenticated = require('../middlewares/isAuthenticated');
 
 // Obter todos usuários
-router.get('/', async function(req, res, next) {
+router.get('/', isAuthenticated, async function(req, res, next) {
   // SELECT * FROM user  
   const users = await User.find(); // Obter todos
 
@@ -11,7 +12,7 @@ router.get('/', async function(req, res, next) {
 });
 
 // Obter um usuário pelo ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params; 
   //const id = req.params.id;
   
