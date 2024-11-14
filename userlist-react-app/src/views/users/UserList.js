@@ -25,11 +25,16 @@ function UserList() {
   for (let i = 0; i < totalPages; i++) {
     pageItems.push(
       <li>
-        <button className="btn btn-primary" 
-          onClick={() => setPage(i+1)}>{i + 1}</button>
+        <button className="btn btn-primary" onClick={() => setPage(i + 1)}>
+          {i + 1}
+        </button>
       </li>
     );
   }
+
+  const perPage = [2, 5, 10, 15].map((e) => <option value={e}>{e}</option>);
+
+  const handleChangeSize = (event) => setSize(event.target.value);
 
   return (
     <>
@@ -61,7 +66,12 @@ function UserList() {
       </table>
 
       <div>
-        {pageItems}
+        <ul className="pagination justify-content-center">
+          {pageItems}
+          <select className="form-select ms-2 w-auto" onChange={handleChangeSize}>
+            {perPage}
+          </select>
+        </ul>
       </div>
     </>
   );
